@@ -1,197 +1,243 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Una sorpresa ❤️</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <style>
-        * {
-            box-sizing: border-box;
-        }
+<title>Cuenta regresiva</title>
 
-        body {
-            margin: 0;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #ff758c, #ff7eb3);
-            color: white;
-            text-align: center;
-            overflow: hidden;
-        }
+<style>
 
-        .contenedor {
-            width: 90%;
-            max-width: 500px;
-            padding: 35px 20px;
-            background: rgba(255, 255, 255, 0.15);
-            border-radius: 25px;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-        }
+body {
+    margin: 0;
+    height: 100vh;
+    background: #000;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: Arial, sans-serif;
+}
 
-        h1 {
-            font-size: 30px;
-            margin-bottom: 15px;
-        }
+.contenedor {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+}
 
-        #contador {
-            font-size: 24px;
-            font-weight: bold;
-            line-height: 1.7;
-        }
+.grupo {
+    text-align: center;
+}
 
-        #mensaje {
-            display: none;
-        }
+.numeros {
+    display: flex;
+    gap: 3px;
+}
 
-        #mensaje h1 {
-            font-size: 32px;
-        }
+.digito {
+    width: 55px;
+    height: 75px;
 
-        .corazon {
-            font-size: 55px;
-            animation: latido 1.2s infinite;
-        }
+    background: linear-gradient(
+        to bottom,
+        #182329,
+        #050708
+    );
 
-        @keyframes latido {
-            0% {
-                transform: scale(1);
-            }
-            50% {
-                transform: scale(1.2);
-            }
-            100% {
-                transform: scale(1);
-            }
-        }
+    border: 2px solid #202c31;
 
-        .corazones {
-            position: fixed;
-            bottom: -20px;
-            font-size: 25px;
-            animation: subir 6s linear infinite;
-            opacity: 0.7;
-        }
+    border-radius: 5px;
 
-        @keyframes subir {
-            from {
-                transform: translateY(0);
-                opacity: 0.7;
-            }
-            to {
-                transform: translateY(-110vh);
-                opacity: 0;
-            }
-        }
-    </style>
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-size: 55px;
+    font-weight: bold;
+
+    color: #eeeeee;
+
+    text-shadow:
+        2px 2px 3px #000;
+
+    box-shadow:
+        inset 0 0 8px #000,
+        0 3px 5px #000;
+}
+
+.etiqueta {
+    margin-top: 10px;
+    font-size: 13px;
+    color: #aaa;
+    text-transform: uppercase;
+}
+
+.separador {
+    font-size: 45px;
+    color: #888;
+    margin-top: -25px;
+}
+
+#mensaje {
+    display: none;
+    color: white;
+    font-size: 32px;
+    text-align: center;
+    font-weight: bold;
+}
+
+@media (max-width: 600px) {
+
+    .contenedor {
+        gap: 5px;
+    }
+
+    .digito {
+        width: 32px;
+        height: 48px;
+        font-size: 35px;
+    }
+
+    .separador {
+        font-size: 25px;
+    }
+
+    .etiqueta {
+        font-size: 8px;
+    }
+}
+
+</style>
 </head>
 
 <body>
 
-    <div class="contenedor">
+<div class="contenedor" id="contador">
 
-        <div id="cuenta">
-            <div class="corazon">❤️</div>
-
-            <h1>Una pequeña sorpresa...</h1>
-
-            <p>Falta:</p>
-
-            <div id="contador">
-                Calculando...
-            </div>
-        </div>
-
-
-        <div id="mensaje">
-
-            <div class="corazon">❤️</div>
-
-            <h1>
-                Alma, ¿querés ser mi novia?
-            </h1>
-
-            <div class="corazon">❤️</div>
-
-        </div>
-
+    <div class="grupo">
+        <div class="numeros" id="dias"></div>
+        <div class="etiqueta">Días</div>
     </div>
 
+    <div class="separador">:</div>
 
-    <script>
+    <div class="grupo">
+        <div class="numeros" id="horas"></div>
+        <div class="etiqueta">Horas</div>
+    </div>
 
-        // Fecha de apertura:
-        // 23 de noviembre de 2026 a las 00:00
-        const fechaObjetivo = new Date("2026-11-23T00:00:00-03:00");
+    <div class="separador">:</div>
 
-        function actualizar() {
+    <div class="grupo">
+        <div class="numeros" id="minutos"></div>
+        <div class="etiqueta">Min</div>
+    </div>
 
-            const ahora = new Date();
+    <div class="separador">:</div>
 
-            const diferencia = fechaObjetivo - ahora;
+    <div class="grupo">
+        <div class="numeros" id="segundos"></div>
+        <div class="etiqueta">Seg</div>
+    </div>
 
-            if (diferencia <= 0) {
-
-                document.getElementById("cuenta").style.display = "none";
-                document.getElementById("mensaje").style.display = "block";
-
-                return;
-            }
-
-            const dias = Math.floor(diferencia / (1000 * 60 * 60 * 24));
-
-            const horas = Math.floor(
-                (diferencia / (1000 * 60 * 60)) % 24
-            );
-
-            const minutos = Math.floor(
-                (diferencia / (1000 * 60)) % 60
-            );
-
-            const segundos = Math.floor(
-                (diferencia / 1000) % 60
-            );
-
-            document.getElementById("contador").innerHTML =
-                dias + " días<br>" +
-                horas + " horas<br>" +
-                minutos + " minutos<br>" +
-                segundos + " segundos";
-        }
-
-        actualizar();
-
-        setInterval(actualizar, 1000);
+</div>
 
 
-        // Corazones flotando
-        function crearCorazon() {
+<div id="mensaje">
+    Alma, ¿querés ser mi novia?
+</div>
 
-            const corazon = document.createElement("div");
 
-            corazon.className = "corazones";
-            corazon.innerHTML = "❤️";
+<script>
 
-            corazon.style.left =
-                Math.random() * 100 + "vw";
+const fechaObjetivo =
+    new Date("2026-11-23T00:00:00-03:00");
 
-            corazon.style.animationDuration =
-                (4 + Math.random() * 4) + "s";
 
-            document.body.appendChild(corazon);
+function ponerNumero(elemento, numero) {
 
-            setTimeout(() => {
-                corazon.remove();
-            }, 8000);
-        }
+    numero = String(numero).padStart(2, "0");
 
-        setInterval(crearCorazon, 800);
+    elemento.innerHTML = "";
 
-    </script>
+    for (let digito of numero) {
+
+        const caja = document.createElement("div");
+
+        caja.className = "digito";
+
+        caja.textContent = digito;
+
+        elemento.appendChild(caja);
+    }
+}
+
+
+function actualizar() {
+
+    const ahora = new Date();
+
+    const diferencia =
+        fechaObjetivo - ahora;
+
+
+    if (diferencia <= 0) {
+
+        document.getElementById("contador")
+            .style.display = "none";
+
+        document.getElementById("mensaje")
+            .style.display = "block";
+
+        return;
+    }
+
+
+    const dias = Math.floor(
+        diferencia / (1000 * 60 * 60 * 24)
+    );
+
+    const horas = Math.floor(
+        (diferencia / (1000 * 60 * 60)) % 24
+    );
+
+    const minutos = Math.floor(
+        (diferencia / (1000 * 60)) % 60
+    );
+
+    const segundos = Math.floor(
+        (diferencia / 1000) % 60
+    );
+
+
+    ponerNumero(
+        document.getElementById("dias"),
+        dias
+    );
+
+    ponerNumero(
+        document.getElementById("horas"),
+        horas
+    );
+
+    ponerNumero(
+        document.getElementById("minutos"),
+        minutos
+    );
+
+    ponerNumero(
+        document.getElementById("segundos"),
+        segundos
+    );
+}
+
+
+actualizar();
+
+setInterval(actualizar, 1000);
+
+</script>
 
 </body>
 </html>
